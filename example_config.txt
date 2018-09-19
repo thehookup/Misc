@@ -1,0 +1,12 @@
+{
+  "timeout": 20,
+  "buttons": [
+    {
+      "name": "Medicine",
+      "address": "00:1C:2B:3D:4E:7C",
+      "domain": "input_boolean",
+      "service": "turn_off",
+      "service_data": "{\"entity_id\": \"input_boolean.medicine_reminder\"}"
+    }
+  ]
+}

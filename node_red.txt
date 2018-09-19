@@ -1,0 +1,180 @@
+[
+    {
+        "id": "d499af0.aafe35",
+        "type": "light-scheduler",
+        "z": "5865e563.6af48c",
+        "settings": "b532f972.44dee8",
+        "events": "[{\"start\":{\"dow\":1,\"mod\":405},\"end\":{\"dow\":2,\"mod\":0}},{\"start\":{\"dow\":2,\"mod\":405},\"end\":{\"dow\":3,\"mod\":0}},{\"start\":{\"dow\":3,\"mod\":405},\"end\":{\"dow\":4,\"mod\":0}},{\"start\":{\"dow\":4,\"mod\":405},\"end\":{\"dow\":5,\"mod\":0}},{\"start\":{\"dow\":5,\"mod\":405},\"end\":{\"dow\":6,\"mod\":0}},{\"start\":{\"dow\":0,\"mod\":525},\"end\":{\"dow\":1,\"mod\":0}},{\"start\":{\"dow\":6,\"mod\":525},\"end\":{\"dow\":0,\"mod\":0}}]",
+        "topic": "",
+        "name": "Medication Reminder",
+        "onPayload": "On",
+        "onPayloadType": "str",
+        "offPayload": "Off",
+        "offPayloadType": "str",
+        "onlyWhenDark": false,
+        "sunElevationThreshold": 6,
+        "sunShowElevationInStatus": false,
+        "outputfreq": "output.statechange.startup",
+        "x": 366.99999618530273,
+        "y": 2293.0906648635864,
+        "wires": [
+            [
+                "73fabb99.bd2db4"
+            ]
+        ]
+    },
+    {
+        "id": "73fabb99.bd2db4",
+        "type": "rbe",
+        "z": "5865e563.6af48c",
+        "name": "RBE",
+        "func": "rbe",
+        "gap": "",
+        "start": "",
+        "inout": "out",
+        "property": "payload",
+        "x": 545.0000076293945,
+        "y": 2293.0908851623535,
+        "wires": [
+            [
+                "de22987b.e7c118"
+            ]
+        ]
+    },
+    {
+        "id": "de22987b.e7c118",
+        "type": "switch",
+        "z": "5865e563.6af48c",
+        "name": "on or off",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "On",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Off",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 678.8636436462402,
+        "y": 2292.2728815078735,
+        "wires": [
+            [
+                "c6b99157.09e1"
+            ],
+            [
+                "55a58bc7.357664"
+            ]
+        ]
+    },
+    {
+        "id": "c6b99157.09e1",
+        "type": "api-call-service",
+        "z": "5865e563.6af48c",
+        "name": "Medicine Reminder On",
+        "server": "d64dbedb.b22df",
+        "service_domain": "input_boolean",
+        "service": "turn_on",
+        "data": "{   \"entity_id\": \"input_boolean.medicine_reminder\" }",
+        "mergecontext": "",
+        "x": 873.8636474609375,
+        "y": 2266.818512916565,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "af0aa825.8ec6f8",
+        "type": "server-state-changed",
+        "z": "5865e563.6af48c",
+        "name": "Medine Reminder",
+        "server": "d64dbedb.b22df",
+        "entityidfilter": "input_boolean.medicine_reminder",
+        "entityidfiltertype": "substring",
+        "haltifstate": "Off",
+        "x": 346.86365127563477,
+        "y": 2482.7269163131714,
+        "wires": [
+            [
+                "dc114b9.72cacb8"
+            ]
+        ]
+    },
+    {
+        "id": "dc114b9.72cacb8",
+        "type": "trigger",
+        "z": "5865e563.6af48c",
+        "op1": "",
+        "op2": "on",
+        "op1type": "nul",
+        "op2type": "str",
+        "duration": "30",
+        "extend": false,
+        "units": "min",
+        "reset": "off",
+        "bytopic": "all",
+        "name": "",
+        "x": 598.8636512756348,
+        "y": 2482.6365442276,
+        "wires": [
+            [
+                "681f8580.c173cc"
+            ]
+        ]
+    },
+    {
+        "id": "681f8580.c173cc",
+        "type": "api-call-service",
+        "z": "5865e563.6af48c",
+        "name": "Notify Rob",
+        "server": "d64dbedb.b22df",
+        "service_domain": "notify",
+        "service": "ios_robs_iphone",
+        "data": "{   \"message\": \"Good Morning! Remember your meds!\"}",
+        "mergecontext": "",
+        "x": 902.8636512756348,
+        "y": 2481.636015892029,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "55a58bc7.357664",
+        "type": "api-call-service",
+        "z": "5865e563.6af48c",
+        "name": "Medicine Reminder Off",
+        "server": "d64dbedb.b22df",
+        "service_domain": "input_boolean",
+        "service": "turn_off",
+        "data": "{   \"entity_id\": \"input_boolean.medicine_reminder\" }",
+        "mergecontext": "",
+        "x": 874.0000133514404,
+        "y": 2316.1817951202393,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b532f972.44dee8",
+        "type": "light-scheduler-settings",
+        "z": "",
+        "name": "my settings",
+        "latitude": "45.5490814",
+        "longitude": "-22.44234640000001"
+    },
+    {
+        "id": "d64dbedb.b22df",
+        "type": "server",
+        "z": "",
+        "name": "Home Assistant",
+        "url": "http://hassio/homeassistant",
+        "pass": "soidfjpaoisdjfpoaisdjfoaisdjfpoaisijdfpoiasjdf"
+    }
+]
